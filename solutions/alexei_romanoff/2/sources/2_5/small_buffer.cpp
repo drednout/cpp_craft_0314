@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
     //std::cerr << "DEBUG: BINARY_DIR is " << BINARY_DIR << "\n";
     
     //switch debug mode on
-    TradeMsg::start_debugging();
+    //TradeMsg::start_debugging();
 
 
     input.open(BINARY_DIR "/input.txt", std::ios::binary);
