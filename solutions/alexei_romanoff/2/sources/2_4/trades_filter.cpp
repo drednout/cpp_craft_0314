@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
     std::ifstream input;
     std::ofstream output;
 
-    //some scaffolds
+    //some useful scaffolds
     //std::cerr << "DEBUG: BINARY_DIR is " << BINARY_DIR << "\n";
     
     //switch debug mode on
