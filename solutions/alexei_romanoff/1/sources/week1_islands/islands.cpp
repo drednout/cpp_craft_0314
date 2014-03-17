@@ -20,8 +20,9 @@ static const int MAP_START_GROUND = 0;
 typedef boost::numeric::ublas::matrix<int> islands_union_array;
 
 
-void union_cells(islands_union_array &islands_map, size_t i1, size_t j1,
-                 size_t i2, size_t j2) {
+void union_cells(islands_union_array &islands_map, const size_t i1, const size_t j1,
+                 const size_t i2, const size_t j2) {
+    //piece of useful debug print
     /*std::cerr << "DEBUG: i1=" << i1 << ", j1=" << j1 << ", i2=" << i2 
               << ", j2=" << j2 << "\n";*/
 
@@ -46,26 +47,26 @@ void union_cells(islands_union_array &islands_map, size_t i1, size_t j1,
 }
 
 
-void process_cell(islands_union_array &islands_map, size_t i, size_t j) {
-    size_t top_i = i - 1;
-    size_t top_j = j;
+void process_cell(islands_union_array &islands_map, const size_t i, const size_t j) {
+    const size_t top_i = i - 1;
+    const size_t top_j = j;
     if (i > 0) {
         union_cells(islands_map, i, j, top_i, top_j);
     }
-    size_t down_i = i + 1;
-    size_t down_j = j;
+    const size_t down_i = i + 1;
+    const size_t down_j = j;
     if (down_i < islands_map.size1()) {
         union_cells(islands_map, i, j, down_i, down_j);
     }
 
-    size_t left_i = i;
-    size_t left_j = j - 1;
+    const size_t left_i = i;
+    const size_t left_j = j - 1;
     if (j > 0) {
         union_cells(islands_map, i, j, left_i, left_j);
     }
     
-    size_t right_i = i;
-    size_t right_j = j + 1;
+    const size_t right_i = i;
+    const size_t right_j = j + 1;
     if (right_j < islands_map.size2()) {
         union_cells(islands_map, i, j, right_i, right_j);
     }
@@ -76,9 +77,6 @@ int main(int argc, char **argv) {
     std::ifstream input;
     std::ofstream output;
 
-    //some scaffolds
-    //std::cerr << "DEBUG: SOURCE_DIR is " << SOURCE_DIR << "\n";
-    //std::cerr << "DEBUG: BINARY_DIR is " << BINARY_DIR << "\n";
 
     input.open(BINARY_DIR "/input.txt");
     output.open(BINARY_DIR "/output.txt");
@@ -97,18 +95,18 @@ int main(int argc, char **argv) {
     std::string line;
 
     while ( std::getline(input, line) ) {
+        //piece of useful debug print
         //std::cerr << "DEBUG: line is " << line << "\n";
         islands_map.push_back(line);
     }
     input.close();
 
-    size_t column_count = islands_map[0].size();
-    size_t row_count = islands_map.size();
+    const size_t column_count = islands_map[0].size();
+    const size_t row_count = islands_map.size();
     //piece of useful debug print
     //std::cerr << "column_count is " << column_count << ", row_count is " 
     //          << row_count << "\n";
 
-    //int *union_array = new int[row_count];
     islands_union_array union_array(row_count, column_count);
 
     int ground_counter = MAP_START_GROUND;
@@ -129,7 +127,28 @@ int main(int argc, char **argv) {
            }
         }
     }
-
+    //overall complexity of this solution is O(N^2), not O(N^4). 
+    //Please not that N=size1*size2, and if we have double loop(in double loop),
+    //it doens't automatically means that complexity is O(N^4).
+    //Algorithm performs linear scans every entry on map once and for each entry it
+    //performs again linear scan for each entry(in the worst case).
+    //The matrix could easily replaced by single array with complex addressing 
+    //schema and we would have just one cycle + one internal cycle.
+    //
+    //I could rewrite the solution for using weighted quick-union with path compression
+    //and would get O((amortized const)*N) complexity, but who will pay me for this work?:)
+    //Implementing simple quick find it the simplest way to solve this problem, it 
+    //takes just ten minutes. As an real engineerr and programmer I am lazy and dont' 
+    //want to perform optimization before it's really needed.
+    //
+    //See Bob's Sedgewick explanation for additional information:
+    //http://algs4.cs.princeton.edu/15uf/
+    //
+    //Y.a. good thing about this approach is it's dynamical nature. If we want to 
+    //add data in real time on our map, complexity of solving this problem again will 
+    //be just O(1).
+    //
+    //Y.a. approach is to use graphs, I see. 
     for (size_t i = 0; i < union_array.size1(); ++i)
         for (size_t j = 0; j < union_array.size2(); ++j) {
             process_cell(union_array, i, j);

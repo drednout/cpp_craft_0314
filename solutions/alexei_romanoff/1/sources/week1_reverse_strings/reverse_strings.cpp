@@ -14,7 +14,7 @@
 static const wchar_t bad_chars_array[] = {L' ', L'-', L'\\', L'/'};
 static const std::set<wchar_t> bad_chars_set(bad_chars_array, bad_chars_array + sizeof(bad_chars_array)/sizeof(wchar_t));
 
-bool is_bad_char(wchar_t c) {
+bool is_bad_char(const wchar_t c) {
     bool is_bad_not_found = bad_chars_set.find(c) == bad_chars_set.end();
     return !is_bad_not_found;
 }
@@ -41,9 +41,6 @@ int main(int argc, char **argv) {
     input.imbue(my_locale);
     output.imbue(my_locale);
 
-    //some scaffolds
-    //std::cerr << "DEBUG: SOURCE_DIR is " << SOURCE_DIR << "\n";
-    //std::cerr << "DEBUG: BINARY_DIR is " << BINARY_DIR << "\n";
 
     //input.txt file is encoded in UTF-8 encoding
     //if your locale is UTF-8 bases everything would be OK
@@ -70,7 +67,6 @@ int main(int argc, char **argv) {
 
     text = transform_string(text, my_locale);
 
-    //output << text << L'\n';
     std::wstring revesed_text(text.rbegin(), text.rend());
 
     while ( std::getline(input, line) ) {
@@ -81,7 +77,6 @@ int main(int argc, char **argv) {
             output << "YES\n";
         }
 
-        //output << line << L'\n';
     }
 
     input.close();
