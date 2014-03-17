@@ -143,14 +143,7 @@ class TradeMsg {
 bool TradeMsg::is_debug = false;
 
 
-
-class TradeMsgSortFunctor {
-    public:
-        bool operator() (const TradeMsg &msg1, const TradeMsg &msg2) {
-            return msg1.get_time() < msg2.get_time();
-        }
-} trade_msg_sort_functor;
-
+typedef std::vector<TradeMsg> TradeMsgVector;
 
 
 int main(int argc, char **argv) {
@@ -177,7 +170,7 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    std::vector<TradeMsg> trade_messages;
+    TradeMsgVector trade_messages;
     uint32_t max_time = 0;
     while(input) {
         TradeMsg msg;
@@ -216,9 +209,8 @@ int main(int argc, char **argv) {
         trade_messages.push_back(msg);
     }
     
-    std::sort(trade_messages.begin(), trade_messages.end(), trade_msg_sort_functor); 
 
-    std::vector<TradeMsg>::iterator it;
+    TradeMsgVector::iterator it;
     for(it=trade_messages.begin(); it != trade_messages.end(); ++it) {
         TradeMsg &msg = *it;
         msg.dump();
