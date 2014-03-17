@@ -144,7 +144,6 @@ class TradeMsg {
 bool TradeMsg::is_debug = false;
 
 
-typedef std::vector<TradeMsg> TradeMsgVector;
 
 
 int main(int argc, char **argv) {
@@ -171,7 +170,6 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    TradeMsgVector trade_messages;
     uint32_t max_time = 0;
     while(input) {
         TradeMsg msg;
@@ -207,18 +205,7 @@ int main(int argc, char **argv) {
             }
         }
         msg.dump();
-        trade_messages.push_back(msg);
-    }
-
-    //TODO: do not use vector, it costs memory, just write or not write 
-    //message to output stream  according to filter policy
-    
-
-    TradeMsgVector::iterator it;
-    for(it=trade_messages.begin(); it != trade_messages.end(); ++it) {
-        TradeMsg &msg = *it;
-        msg.dump();
-        TradeMsg::TradeError error_code = msg.write_to_stream(output);
+        error_code = msg.write_to_stream(output);
         if (error_code != TradeMsg::ERROR_OK) {
             std::cerr << "ERROR: Unable to write trade msg from stream. Error: " 
                       << error_code << "\n";
@@ -226,7 +213,7 @@ int main(int argc, char **argv) {
             return 1;
         }
     }
-    
+
     input.close();
     output.close();
 
