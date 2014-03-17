@@ -11,6 +11,7 @@
 #include <vector>
 
 
+
 class TradeMsg {
     private:
         uint32_t type;
@@ -23,13 +24,13 @@ class TradeMsg {
             ERROR_INVALID_DATA = 1,
             ERROR_INVALID_MSG_TYPE = 2,
             ERROR_INVALID_MSG_LENGTH = 3,
-            ERROR_INVALID_STREAM = 4,
+            ERROR_INVALID_STREAM = 4
         };
         enum TradeMsgType {
             MARKET_OPEN = 1,
             TRADE = 2,
             QUOTE = 3,
-            MARKET_CLOSE = 4,
+            MARKET_CLOSE = 4
         };
         static const int MAX_MSG_LENHTH = 100000;
 
@@ -208,6 +209,9 @@ int main(int argc, char **argv) {
         msg.dump();
         trade_messages.push_back(msg);
     }
+
+    //TODO: do not use vector, it costs memory, just write or not write 
+    //message to output stream  according to filter policy
     
 
     TradeMsgVector::iterator it;
