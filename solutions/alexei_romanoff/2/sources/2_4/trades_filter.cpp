@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
             msg.dump();
             continue;
         }
-        uint32_t msg_time = msg.get_time();
+        const uint32_t msg_time = msg.get_time();
         if (max_time == 0) {
             max_time = msg_time;
         } else {
