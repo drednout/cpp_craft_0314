@@ -153,7 +153,7 @@ int main(int argc, char **argv) {
     //some useful scaffolds
     //std::cerr << "DEBUG: BINARY_DIR is " << BINARY_DIR << "\n";
     
-    //switch debug mode on
+    //switch debug mode on/off
     //TradeMsg::start_debugging();
 
 
