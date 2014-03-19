@@ -11,6 +11,7 @@
 #include <vector>
 
 
+
 class TradeMsg {
     private:
         uint32_t type;
@@ -23,13 +24,13 @@ class TradeMsg {
             ERROR_INVALID_DATA = 1,
             ERROR_INVALID_MSG_TYPE = 2,
             ERROR_INVALID_MSG_LENGTH = 3,
-            ERROR_INVALID_STREAM = 4,
+            ERROR_INVALID_STREAM = 4
         };
         enum TradeMsgType {
             MARKET_OPEN = 1,
             TRADE = 2,
             QUOTE = 3,
-            MARKET_CLOSE = 4,
+            MARKET_CLOSE = 4
         };
         static const int MAX_MSG_LENHTH = 100000;
 
@@ -144,23 +145,15 @@ bool TradeMsg::is_debug = false;
 
 
 
-class TradeMsgSortFunctor {
-    public:
-        bool operator() (const TradeMsg &msg1, const TradeMsg &msg2) {
-            return msg1.get_time() < msg2.get_time();
-        }
-} trade_msg_sort_functor;
-
-
 
 int main(int argc, char **argv) {
     std::ifstream input;
     std::ofstream output;
 
-    //some scaffolds
+    //some useful scaffolds
     //std::cerr << "DEBUG: BINARY_DIR is " << BINARY_DIR << "\n";
     
-    //switch debug mode on
+    //switch debug mode on/off
     //TradeMsg::start_debugging();
 
 
@@ -177,7 +170,6 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    std::vector<TradeMsg> trade_messages;
     uint32_t max_time = 0;
     while(input) {
         TradeMsg msg;
@@ -199,7 +191,7 @@ int main(int argc, char **argv) {
             msg.dump();
             continue;
         }
-        uint32_t msg_time = msg.get_time();
+        const uint32_t msg_time = msg.get_time();
         if (max_time == 0) {
             max_time = msg_time;
         } else {
@@ -213,16 +205,7 @@ int main(int argc, char **argv) {
             }
         }
         msg.dump();
-        trade_messages.push_back(msg);
-    }
-    
-    std::sort(trade_messages.begin(), trade_messages.end(), trade_msg_sort_functor); 
-
-    std::vector<TradeMsg>::iterator it;
-    for(it=trade_messages.begin(); it != trade_messages.end(); ++it) {
-        TradeMsg &msg = *it;
-        msg.dump();
-        TradeMsg::TradeError error_code = msg.write_to_stream(output);
+        error_code = msg.write_to_stream(output);
         if (error_code != TradeMsg::ERROR_OK) {
             std::cerr << "ERROR: Unable to write trade msg from stream. Error: " 
                       << error_code << "\n";
@@ -230,7 +213,7 @@ int main(int argc, char **argv) {
             return 1;
         }
     }
-    
+
     input.close();
     output.close();
 
