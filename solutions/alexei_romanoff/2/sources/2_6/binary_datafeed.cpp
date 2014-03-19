@@ -44,6 +44,12 @@ class StockMsg {
                 memcpy(date_time, msg.date_time, date_time_size + 1/*\0*/);
             }
         };
+        const StockMsg& operator=(const StockMsg&) { 
+            //some scaffolds
+            //std::cerr << "DEBUG: = operator\n";
+            return *this; 
+        }
+
 
         enum StockError {
             ERROR_OK = 0,
@@ -108,7 +114,7 @@ class StockMsg {
             StockMsg::is_debug = false;
         }
 
-        void set_stock_name_size(size_t new_size) {
+        void set_stock_name_size(const size_t new_size) {
             if (new_size > this->stock_name_size) {
                 char *new_stock_name = new char[new_size + 1/*\0*/];
                 memcpy(new_stock_name, this->stock_name, this->stock_name_size + 1/*\0*/);
