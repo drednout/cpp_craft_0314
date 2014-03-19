@@ -91,7 +91,7 @@ class StockMsg {
                 std::string s(date_time);
                 boost::gregorian::date d(boost::gregorian::from_undelimited_string(s));
                 boost::gregorian::date::ymd_type ymd = d.year_month_day();
-                date_time_as_uint = ymd.year*372 + ymd.month*31 + ymd.day;
+                date_time_as_uint = (ymd.year-1) * 372 + (ymd.month - 1) * 31 + ymd.day;
             } catch(std::out_of_range e) {
                 std::cerr << "DEBUG: date_time exception is " << e.what() << "\n";
                 return StockMsg::ERROR_INVALID_DATETIME;
