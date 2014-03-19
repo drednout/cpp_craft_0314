@@ -18,6 +18,8 @@ typedef uint32_t SummaryKey;
 typedef std::pair < std::set<uint32_t>, uint32_t> SummaryValue;
 typedef std::map <SummaryKey, SummaryValue> TradeMsgSummary;
 
+static size_t max_buffer_size = 2048;
+
 class TradeMsg {
     private:
         uint32_t type;
@@ -73,6 +75,10 @@ class TradeMsg {
                 dump_msg = this->msg;
             }
             std::cerr << "msg: " << dump_msg << "\n";
+        }
+
+        size_t get_data_size() const {
+            return sizeof(type) + sizeof(time) + sizeof(msg_length) + msg_length;
         }
 
 
@@ -153,6 +159,9 @@ int main(int argc, char **argv) {
     }
 
     TradeMsgSummary msg_summary;
+    size_t current_buffer_capacity = 0;
+    uint32_t current_processed_time = 0;
+
     while(input) {
         TradeMsg msg;
 
@@ -167,8 +176,21 @@ int main(int argc, char **argv) {
             msg.dump();
             return 1;
         }
+
+        if (current_processed_time != msg.get_time()) {
+            current_buffer_capacity = 0;
+            current_processed_time = msg.get_time();
+        }
+        current_buffer_capacity += msg.get_data_size();
+        //useful debug print, do not remove me:)
+        //std::cerr << "DEBUG: current_buffer_capacity is " << current_buffer_capacity << "\n";
+        if (current_buffer_capacity > max_buffer_size) {
+            //useful debug print, do not remove me:)
+            //std::cerr << "DEBUG: buffer limit exceded, skipped msg\n";
+            continue;
+        }
+
         SummaryKey key = msg.get_type();
-        //, msg.get_time());
         TradeMsgSummary::iterator it = msg_summary.find(key);
         if ( it == msg_summary.end()) {
             //insert new summary value into map
