@@ -75,10 +75,7 @@ namespace solution_2_4 {
             }
 
             bool is_good_msg_type() const {
-                if (type >= MARKET_OPEN &&
-                    type <= MARKET_CLOSE)
-                    return true;
-                return false;
+                return ( type >= MARKET_OPEN && type <= MARKET_CLOSE );
             }
 
 

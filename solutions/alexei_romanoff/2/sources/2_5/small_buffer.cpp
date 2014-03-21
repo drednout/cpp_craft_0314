@@ -159,8 +159,6 @@ int main(int argc, char **argv) {
     }
 
     TradeMsgSummary msg_summary;
-    size_t current_buffer_capacity = 0;
-    uint32_t current_processed_time = 0;
 
     while(input) {
         TradeMsg msg;
@@ -177,19 +175,11 @@ int main(int argc, char **argv) {
             return 1;
         }
 
-        if (current_processed_time != msg.get_time()) {
-            current_buffer_capacity = 0;
-            current_processed_time = msg.get_time();
-        }
-        current_buffer_capacity += msg.get_data_size();
-        //useful debug print, do not remove me:)
-        //std::cerr << "DEBUG: current_buffer_capacity is " << current_buffer_capacity << "\n";
-        if (current_buffer_capacity > max_buffer_size) {
+        if (msg.get_data_size() > max_buffer_size) {
             //useful debug print, do not remove me:)
             //std::cerr << "DEBUG: buffer limit exceded, skipped msg\n";
             continue;
         }
-
         SummaryKey key = msg.get_type();
         TradeMsgSummary::iterator it = msg_summary.find(key);
         if ( it == msg_summary.end()) {
@@ -215,9 +205,9 @@ int main(int argc, char **argv) {
         const double msg_rate = ((double)msg_count)/uniq_seconds.size();
         output.write((char*)&msg_type, sizeof(msg_type));
         output.write((char*)&msg_rate, sizeof(msg_rate));
-        //useful debug print
-        /*std::cerr << "DEBUG: msg_type is " << msg_type << "\n";
-        std::cerr << "DEBUG: msg_rate is " << msg_rate << "\n";*/
+        //useful debug print, do not remove me
+        //std::cerr << "DEBUG: msg_type is " << msg_type << "\n";
+        //std::cerr << "DEBUG: msg_rate is " << msg_rate << "\n";
         
     }
 
