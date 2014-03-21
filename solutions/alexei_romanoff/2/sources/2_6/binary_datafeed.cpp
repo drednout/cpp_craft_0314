@@ -29,7 +29,8 @@ class StockMsg {
                      stock_name(NULL), date_time(NULL), date_time_as_uint(0),
                      price(0.0), vwap(0.0), volume(0), f1(0.0), t1(0.0),
                      f2(0.0), f4(0.0), f3(0.0) { } ;
-        StockMsg(const StockMsg& msg) : stock_name_size(StockMsg::default_stock_name_size), 
+        StockMsg(const StockMsg& msg) : 
+                     stock_name_size(StockMsg::default_stock_name_size), 
                      stock_name(NULL), date_time(NULL), 
                      date_time_as_uint(msg.date_time_as_uint),
                      price(msg.price), vwap(msg.vwap), volume(msg.volume), 
