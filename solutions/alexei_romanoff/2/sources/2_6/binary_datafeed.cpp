@@ -172,13 +172,7 @@ class StockMsg {
             if(!output_file.write((char *)&volume, sizeof(volume))) {
                 return StockMsg::ERROR_INVALID_STREAM;
             }
-            if(!output_file.write((char *)&f1, sizeof(f1))) {
-                return StockMsg::ERROR_INVALID_STREAM;
-            }
-            if(!output_file.write((char *)&f4, sizeof(f4))) {
-                return StockMsg::ERROR_INVALID_STREAM;
-            }
-            if(!output_file.write((char *)&f3, sizeof(f3))) {
+            if(!output_file.write((char *)&f2, sizeof(f1))) {
                 return StockMsg::ERROR_INVALID_STREAM;
             }
             return StockMsg::ERROR_OK;
@@ -207,7 +201,7 @@ int main(int argc, char **argv) {
     std::ofstream output;
 
     //switch debug mode on/off
-    StockMsg::start_debugging();
+    //StockMsg::start_debugging();
 
     input.open(BINARY_DIR "/input.txt", std::ios::binary);
     output.open(BINARY_DIR "/output.txt", std::ios::binary);
