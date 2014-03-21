@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
         const uint32_t msg_type = summary_record.first;
         const SecondsSet &uniq_seconds = summary_record.second.first;
         const uint32_t msg_count = summary_record.second.second;
-        const double msg_rate = ((double)msg_count)/uniq_seconds.size();
+        const double msg_rate = static_cast< double >(msg_count)/uniq_seconds.size();
         output.write((char*)&msg_type, sizeof(msg_type));
         output.write((char*)&msg_rate, sizeof(msg_rate));
         //useful debug print, do not remove me
