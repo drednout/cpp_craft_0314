@@ -17,6 +17,7 @@
 typedef uint32_t SummaryKey;
 typedef std::pair < std::set<uint32_t>, uint32_t> SummaryValue;
 typedef std::map <SummaryKey, SummaryValue> TradeMsgSummary;
+typedef std::set<uint32_t> SecondsSet;
 
 static size_t max_buffer_size = 2048;
 
@@ -181,7 +182,7 @@ int main(int argc, char **argv) {
         TradeMsgSummary::iterator it = msg_summary.find(key);
         if ( it == msg_summary.end()) {
             //insert new summary value into map
-            std::set<uint32_t> uniq_seconds;
+            SecondsSet uniq_seconds;
             uniq_seconds.insert(msg.get_time());
             SummaryValue value(uniq_seconds, 1);
             std::pair <SummaryKey, SummaryValue> new_record(key, value);
@@ -197,7 +198,7 @@ int main(int argc, char **argv) {
     for(it=msg_summary.begin(); it != msg_summary.end(); ++it) {
         std::pair <SummaryKey, SummaryValue> summary_record = *it;
         const uint32_t msg_type = summary_record.first;
-        const std::set<uint32_t> &uniq_seconds = summary_record.second.first;
+        const SecondsSet &uniq_seconds = summary_record.second.first;
         const uint32_t msg_count = summary_record.second.second;
         const double msg_rate = ((double)msg_count)/uniq_seconds.size();
         output.write((char*)&msg_type, sizeof(msg_type));
