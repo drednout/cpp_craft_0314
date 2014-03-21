@@ -80,12 +80,12 @@ int main(int argc, char **argv) {
 
     input.open(BINARY_DIR "/input.txt");
     output.open(BINARY_DIR "/output.txt");
-    if (not input.is_open()) {
+    if (!input.is_open()) {
         std::cerr << "Unable to open the input file. Reason: " << 
                       strerror(errno) << "\n";
         return 1;
     }
-    if (not output.is_open()) {
+    if (!output.is_open()) {
         std::cerr << "Unable to open the output file. Reason: " << 
                       strerror(errno) << "\n";
         return 1;
