@@ -35,7 +35,7 @@ namespace solution_2_5 {
             uint32_t msg_length;
             char * msg;
         public:
-            static const int MAX_MSG_LENHTH = 100000;
+            static const int MAX_MSG_LENGTH = 100000;
             static const int MAX_MSG_TYPE = 100000;
 
             static bool is_debug;
@@ -96,7 +96,7 @@ namespace solution_2_5 {
                     return ERROR_INVALID_STREAM;
                 }
 
-                if (msg_length > MAX_MSG_LENHTH) {
+                if (msg_length > MAX_MSG_LENGTH) {
                     return ERROR_INVALID_MSG_LENGTH;
                 }
                 if (msg_length) {
