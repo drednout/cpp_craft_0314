@@ -111,21 +111,21 @@ class StockMsg {
         }
 
         void set_stock_name_size(const size_t new_size) {
-            if (new_size > this->stock_name_size) {
+            if (new_size > stock_name_size) {
                 char *new_stock_name = new char[new_size + 1/*\0*/];
-                memcpy(new_stock_name, this->stock_name, this->stock_name_size + 1/*\0*/);
-                delete [] this->stock_name;
-                this->stock_name = new_stock_name;
-            } else if (new_size < this->stock_name_size) {
+                memcpy(new_stock_name, stock_name, stock_name_size + 1/*\0*/);
+                delete [] stock_name;
+                stock_name = new_stock_name;
+            } else if (new_size < stock_name_size) {
                 char *new_stock_name = new char[new_size + 1/*\0*/];
-                memcpy(new_stock_name, this->stock_name, new_size);
+                memcpy(new_stock_name, stock_name, new_size);
                 new_stock_name[new_size-1] = '\0';
-                delete [] this->stock_name;
-                this->stock_name = new_stock_name;
+                delete [] stock_name;
+                stock_name = new_stock_name;
             } else {
                 //do nothing, new_size is equial to stock_name_size
             }
-            this->stock_name_size = new_size;
+            stock_name_size = new_size;
         }
 
         void dump() const {
@@ -134,13 +134,13 @@ class StockMsg {
 
             std::cerr << "DEBUG: ";
             const char *stock_name= "NULL";
-            if (this->stock_name != NULL) {
+            if (stock_name != NULL) {
                 stock_name = this->stock_name;
             }
             std::cerr << "stock_name: " << stock_name<< ", ";
 
             const char *date_time = "NULL";
-            if (this->date_time != NULL) {
+            if (date_time != NULL) {
                 date_time = this->date_time;
             }
             std::cerr << "date_time: " << date_time << ", ";
