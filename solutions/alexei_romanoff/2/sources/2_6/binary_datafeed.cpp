@@ -44,11 +44,6 @@ class StockMsg {
                 memcpy(date_time, msg.date_time, date_time_size + 1/*\0*/);
             }
         };
-        const StockMsg& operator=(const StockMsg&) { 
-            //some scaffolds
-            //std::cerr << "DEBUG: = operator\n";
-            return *this; 
-        }
 
 
         enum StockError {
