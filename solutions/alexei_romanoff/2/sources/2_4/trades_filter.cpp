@@ -95,9 +95,12 @@ class TradeMsg {
                 return TradeMsg::ERROR_INVALID_STREAM;
             }
 
-            if (msg_length <= 0 || 
-                msg_length > MAX_MSG_LENHTH) {
+            if (msg_length > MAX_MSG_LENHTH) {
                 return TradeMsg::ERROR_INVALID_MSG_LENGTH;
+            }
+            if (msg_length == 0) {
+                //we don't need to read message, all right
+                return TradeMsg::ERROR_OK;
             }
             msg = new char[msg_length + 1/*\0*/];
 
