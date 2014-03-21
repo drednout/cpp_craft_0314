@@ -20,118 +20,120 @@ typedef std::map <SummaryKey, SummaryValue> TradeMsgSummary;
 
 static size_t max_buffer_size = 2048;
 
-class TradeMsg {
-    private:
-        uint32_t type;
-        uint32_t time;
-        uint32_t msg_length;
-        char * msg;
-    public:
-        enum TradeError {
-            ERROR_OK = 0,
-            ERROR_INVALID_DATA = 1,
-            ERROR_INVALID_MSG_TYPE = 2,
-            ERROR_INVALID_MSG_LENGTH = 3,
-            ERROR_INVALID_STREAM = 4
-        };
-        static const int MAX_MSG_LENHTH = 100000;
-        static const int MAX_MSG_TYPE = 100000;
+namespace solution_2_5 {
+    enum TradeError {
+        ERROR_OK = 0,
+        ERROR_INVALID_DATA = 1,
+        ERROR_INVALID_MSG_TYPE = 2,
+        ERROR_INVALID_MSG_LENGTH = 3,
+        ERROR_INVALID_STREAM = 4
+    };
+    class TradeMsg {
+        private:
+            uint32_t type;
+            uint32_t time;
+            uint32_t msg_length;
+            char * msg;
+        public:
+            static const int MAX_MSG_LENHTH = 100000;
+            static const int MAX_MSG_TYPE = 100000;
 
-        static bool is_debug;
-        void static start_debugging() {
-            TradeMsg::is_debug = true;
-        }
-        void static stop_debugging() {
-            TradeMsg::is_debug = false;
-        }
-
-        TradeMsg() : type(0), time(0), msg_length(0), msg(NULL) {} ;
-        TradeMsg(const TradeMsg& msg): type(msg.type), time(msg.time), 
-                                       msg_length(msg.msg_length), msg(NULL)
-        {
-            if (this->msg_length == 0) 
-                return;
-            //some scaffolds
-            //std::cerr << "DEBUG: copy constructor\n";
-            this->msg = new char[this->msg_length + 1/*\0*/];
-            memcpy(this->msg, msg.msg, this->msg_length + 1/*\0*/);
-        } 
-        const TradeMsg& operator=(const TradeMsg&) { 
-            //some scaffolds
-            //std::cerr << "DEBUG: = operator\n";
-            return *this; 
-        }
-
-        void dump() const {
-            if (!is_debug) 
-                return;
-
-            std::cerr << "DEBUG: ";
-            std::cerr << "type: " << this->type << ", ";
-            std::cerr << "time: " << this->time << ", ";
-            std::cerr << "msg_length: " << this->msg_length << ", ";
-            const char *dump_msg = "NULL";
-            if (this->msg) {
-                dump_msg = this->msg;
+            static bool is_debug;
+            void static start_debugging() {
+                TradeMsg::is_debug = true;
             }
-            std::cerr << "msg: " << dump_msg << "\n";
-        }
-
-        size_t get_data_size() const {
-            return sizeof(type) + sizeof(time) + sizeof(msg_length) + msg_length;
-        }
-
-
-        TradeMsg::TradeError read_from_stream(std::ifstream &input_file) {
-            if(!input_file.read((char *)&type, sizeof(type))) {
-                return TradeMsg::ERROR_INVALID_STREAM;
+            void static stop_debugging() {
+                TradeMsg::is_debug = false;
             }
 
-            if(!input_file.read((char *)&time, sizeof(time))) {
-                return TradeMsg::ERROR_INVALID_STREAM;
+            TradeMsg() : type(0), time(0), msg_length(0), msg(NULL) {} ;
+            TradeMsg(const TradeMsg& msg): type(msg.type), time(msg.time), 
+                                           msg_length(msg.msg_length), msg(NULL)
+            {
+                if (this->msg_length == 0) 
+                    return;
+                //some scaffolds
+                //std::cerr << "DEBUG: copy constructor\n";
+                this->msg = new char[this->msg_length + 1/*\0*/];
+                memcpy(this->msg, msg.msg, this->msg_length + 1/*\0*/);
+            } 
+            const TradeMsg& operator=(const TradeMsg&) { 
+                //some scaffolds
+                //std::cerr << "DEBUG: = operator\n";
+                return *this; 
             }
 
-            if(!input_file.read((char *)&msg_length, sizeof(msg_length))) {
-                return TradeMsg::ERROR_INVALID_STREAM;
-            }
+            void dump() const {
+                if (!is_debug) 
+                    return;
 
-            if (msg_length > MAX_MSG_LENHTH) {
-                return TradeMsg::ERROR_INVALID_MSG_LENGTH;
-            }
-            if (msg_length) {
-                msg = new char[msg_length + 1/*\0*/];
-
-                //valgrind pacifier:)
-                //->Conditional jump or move depends on uninitialised value
-                //in dump()
-                memset(msg, 0, msg_length + 1/*\0*/);
-
-                if(!input_file.read((char *)msg, msg_length)) {
-                    return TradeMsg::ERROR_INVALID_STREAM;
+                std::cerr << "DEBUG: ";
+                std::cerr << "type: " << this->type << ", ";
+                std::cerr << "time: " << this->time << ", ";
+                std::cerr << "msg_length: " << this->msg_length << ", ";
+                const char *dump_msg = "NULL";
+                if (this->msg) {
+                    dump_msg = this->msg;
                 }
-            }
-            if (this->type > MAX_MSG_TYPE) {
-                return TradeMsg::ERROR_INVALID_MSG_TYPE;
+                std::cerr << "msg: " << dump_msg << "\n";
             }
 
-            return TradeMsg::ERROR_OK;
-        }
-
-        ~TradeMsg() {
-            if (msg != NULL) {
-                delete [] msg;
-                msg = NULL;
+            size_t get_data_size() const {
+                return sizeof(type) + sizeof(time) + sizeof(msg_length) + msg_length;
             }
-        };
 
-        uint32_t get_time() const {
-            return time;
-        }
-        uint32_t get_type() const {
-            return type;
-        }
-};
-bool TradeMsg::is_debug = false;
+
+            TradeError read_from_stream(std::ifstream &input_file) {
+                if(!input_file.read((char *)&type, sizeof(type))) {
+                    return ERROR_INVALID_STREAM;
+                }
+
+                if(!input_file.read((char *)&time, sizeof(time))) {
+                    return ERROR_INVALID_STREAM;
+                }
+
+                if(!input_file.read((char *)&msg_length, sizeof(msg_length))) {
+                    return ERROR_INVALID_STREAM;
+                }
+
+                if (msg_length > MAX_MSG_LENHTH) {
+                    return ERROR_INVALID_MSG_LENGTH;
+                }
+                if (msg_length) {
+                    msg = new char[msg_length + 1/*\0*/];
+
+                    //valgrind pacifier:)
+                    //->Conditional jump or move depends on uninitialised value
+                    //in dump()
+                    memset(msg, 0, msg_length + 1/*\0*/);
+
+                    if(!input_file.read((char *)msg, msg_length)) {
+                        return ERROR_INVALID_STREAM;
+                    }
+                }
+                if (this->type > MAX_MSG_TYPE) {
+                    return ERROR_INVALID_MSG_TYPE;
+                }
+
+                return ERROR_OK;
+            }
+
+            ~TradeMsg() {
+                if (msg != NULL) {
+                    delete [] msg;
+                    msg = NULL;
+                }
+            };
+
+            uint32_t get_time() const {
+                return time;
+            }
+            uint32_t get_type() const {
+                return type;
+            }
+    };
+    bool TradeMsg::is_debug = false;
+}
 
 
 int main(int argc, char **argv) {
@@ -161,10 +163,10 @@ int main(int argc, char **argv) {
     TradeMsgSummary msg_summary;
 
     while(input) {
-        TradeMsg msg;
+        solution_2_5::TradeMsg msg;
 
-        TradeMsg::TradeError error_code = msg.read_from_stream(input);
-        if (error_code != TradeMsg::ERROR_OK) {
+        solution_2_5::TradeError error_code = msg.read_from_stream(input);
+        if (error_code != solution_2_5::ERROR_OK) {
             if (input.eof()) {
                 //all right, all file content has been read
                 break;
