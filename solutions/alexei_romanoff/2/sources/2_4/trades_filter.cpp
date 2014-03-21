@@ -46,12 +46,12 @@ namespace solution_2_4 {
             TradeMsg(const TradeMsg& msg): type(msg.type), time(msg.time), 
                                            msg_length(msg.msg_length), msg(NULL)
             {
-                if (this->msg_length == 0) 
+                if (msg_length == 0) 
                     return;
                 //some scaffolds
                 //std::cerr << "DEBUG: copy constructor\n";
-                this->msg = new char[this->msg_length + 1/*\0*/];
-                memcpy(this->msg, msg.msg, this->msg_length + 1/*\0*/);
+                this->msg = new char[msg_length + 1/*\0*/];
+                memcpy(this->msg, msg.msg, msg_length + 1/*\0*/);
             } 
             const TradeMsg& operator=(const TradeMsg&) { 
                 //some scaffolds
@@ -64,12 +64,12 @@ namespace solution_2_4 {
                     return;
 
                 std::cerr << "DEBUG: ";
-                std::cerr << "type: " << this->type << ", ";
-                std::cerr << "time: " << this->time << ", ";
-                std::cerr << "msg_length: " << this->msg_length << ", ";
+                std::cerr << "type: " << type << ", ";
+                std::cerr << "time: " << time << ", ";
+                std::cerr << "msg_length: " << msg_length << ", ";
                 const char *dump_msg = "NULL";
-                if (this->msg) {
-                    dump_msg = this->msg;
+                if (msg) {
+                    dump_msg = msg;
                 }
                 std::cerr << "msg: " << dump_msg << "\n";
             }
