@@ -57,11 +57,6 @@ namespace solution_2_5 {
                 this->msg = new char[this->msg_length + 1/*\0*/];
                 memcpy(this->msg, msg.msg, this->msg_length + 1/*\0*/);
             } 
-            const TradeMsg& operator=(const TradeMsg&) { 
-                //some scaffolds
-                //std::cerr << "DEBUG: = operator\n";
-                return *this; 
-            }
 
             void dump() const {
                 if (!is_debug) 
