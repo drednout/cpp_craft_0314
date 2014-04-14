@@ -14,6 +14,8 @@ namespace task4_4
 		explicit b_message( std::istream& inp );
 	public:
 		static message_ptr create_message( std::istream& inp );
+        explicit b_message(b_message &msg);
+        const b_message& operator=(b_message& msg);
 		~b_message();
 
 		const char type() const;
