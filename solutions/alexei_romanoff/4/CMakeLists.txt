@@ -6,4 +6,9 @@ include( environment.cmake required )
 
 modules( 4_4 4_5 4_6 )
 
+find_package( Boost ${SEARCH_PARAMETERS} COMPONENTS
+        system
+        thread
+)
+
 compile()
